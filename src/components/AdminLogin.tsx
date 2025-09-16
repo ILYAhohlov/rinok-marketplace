@@ -1,0 +1,88 @@
+import React, { useState } from 'react';
+
+interface AdminLoginProps {
+  onLogin: () => void;
+}
+
+const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
+  const [credentials, setCredentials] = useState({ login: '', password: '' });
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Простая проверка
+    if (credentials.login === 'admin' && credentials.password === 'admin123') {
+      onLogin();
+    } else {
+      setError('Неверный логин или пароль');
+    }
+  };
+
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '80vh',
+      padding: '20px'
+    }}>
+      <div className="card" style={{ width: '400px', textAlign: 'center' }}>
+        <h2 style={{ marginBottom: '24px' }}>Вход в админ панель</h2>
+        
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '16px' }}>
+            <input
+              type="text"
+              placeholder="Логин"
+              className="input"
+              value={credentials.login}
+              onChange={(e) => setCredentials({...credentials, login: e.target.value})}
+              required
+            />
+          </div>
+          
+          <div style={{ marginBottom: '16px' }}>
+            <input
+              type="password"
+              placeholder="Пароль"
+              className="input"
+              value={credentials.password}
+              onChange={(e) => setCredentials({...credentials, password: e.target.value})}
+              required
+            />
+          </div>
+          
+          {error && (
+            <div style={{ 
+              color: '#dc3545', 
+              marginBottom: '16px',
+              fontSize: '14px'
+            }}>
+              {error}
+            </div>
+          )}
+          
+          <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+            Войти
+          </button>
+        </form>
+        
+        <div style={{ 
+          marginTop: '20px', 
+          fontSize: '12px', 
+          color: '#666',
+          background: '#f8f9fa',
+          padding: '10px',
+          borderRadius: '4px'
+        }}>
+          <strong>Тестовые данные:</strong><br/>
+          Логин: admin<br/>
+          Пароль: admin123
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminLogin;

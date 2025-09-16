@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import CustomerDashboard from './pages/CustomerDashboard';
 import SellerDashboard from './pages/SellerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminLogin from './components/AdminLogin';
 import { User, Product, CartItem, Order } from './types';
 import { mockUsers, mockProducts } from './utils/mockData';
 import { api } from './utils/api';
@@ -30,6 +31,7 @@ const AppContent: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -337,16 +339,20 @@ const AppContent: React.FC = () => {
             <Route 
               path="/admin" 
               element={
-                <AdminDashboard 
-                  orders={orders.map(order => ({
-                    ...order,
-                    customerName: 'Покупатель'
-                  }))}
-                  products={products}
-                  users={[]}
-                  onUpdateProduct={handleUpdateProduct}
-                  onDeleteProduct={handleDeleteProduct}
-                />
+                isAdminLoggedIn ? (
+                  <AdminDashboard 
+                    orders={orders.map(order => ({
+                      ...order,
+                      customerName: 'Покупатель'
+                    }))}
+                    products={products}
+                    users={[]}
+                    onUpdateProduct={handleUpdateProduct}
+                    onDeleteProduct={handleDeleteProduct}
+                  />
+                ) : (
+                  <AdminLogin onLogin={() => setIsAdminLoggedIn(true)} />
+                )
               } 
             />
           </Routes>
