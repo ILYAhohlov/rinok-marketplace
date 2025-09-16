@@ -35,13 +35,13 @@ const AppContent: React.FC = () => {
     loadData();
   }, []);
 
-  // Не перезагружаем данные при смене пользователя
-  // useEffect(() => {
-  //   if (currentUser && !loading) {
-  //     console.log('User changed, reloading data for:', currentUser.name);
-  //     loadData();
-  //   }
-  // }, [currentUser?.id]);
+  // Перезагружаем данные при смене пользователя
+  useEffect(() => {
+    if (currentUser && !loading) {
+      console.log('User changed, reloading data for:', currentUser.name);
+      loadData();
+    }
+  }, [currentUser?.id]);
 
 
 
@@ -59,7 +59,9 @@ const AppContent: React.FC = () => {
       // Используем только данные с сервера
       // Моковые данные больше не нужны
       
-      console.log('Loaded from server:', productsData.length, 'products,', usersData.length, 'users');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Loaded from server:', productsData.length, 'products');
+      }
     } catch (error) {
       console.error('Error loading data from server:', error);
       // Fallback на моковые данные при ошибке CORS
@@ -84,7 +86,9 @@ const AppContent: React.FC = () => {
       // Сохраняем нового пользователя на сервер
       try {
         await api.createUser(user);
-        console.log('User saved to server:', user.id);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('User saved to server');
+        }
       } catch (error) {
         console.error('Error saving user:', error);
       }
@@ -136,7 +140,9 @@ const AppContent: React.FC = () => {
       setProducts(prev => prev.map(p => 
         p.id === productId ? { ...p, ...updates } : p
       ));
-      console.log('Product updated on server:', productId);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Product updated');
+      }
     } catch (error) {
       console.error('Error updating product:', error);
       alert('Ошибка обновления товара');
@@ -147,7 +153,9 @@ const AppContent: React.FC = () => {
     try {
       await api.deleteProduct(productId);
       setProducts(prev => prev.filter(p => p.id !== productId));
-      console.log('Product deleted from server:', productId);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Product deleted');
+      }
     } catch (error) {
       console.error('Error deleting product:', error);
       alert('Ошибка удаления товара');
@@ -161,13 +169,15 @@ const AppContent: React.FC = () => {
       // Номер павильона берем из текущего пользователя
       const productWithPavilion = {
         ...newProduct,
-        sellerId: String(currentUser?.id),
+        sellerId: String(currentUser?.id).trim(),
         pavilionNumber: currentUser?.pavilionNumber || ''
       };
       
       const product = await api.createProduct(productWithPavilion);
       setProducts(prev => [...prev, product]);
-      console.log('Product saved to server:', product.id);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Product saved');
+      }
       
     } catch (error) {
       console.error('Server error:', error);

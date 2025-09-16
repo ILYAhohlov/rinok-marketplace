@@ -65,8 +65,8 @@ export const api = {
   // Upload image to Telegram and get URL
   uploadImageToTelegram: async (file: File): Promise<string> => {
     try {
-      const BOT_TOKEN = '7991123999:AAFsFnrAfySNgR3k2QRytrZr7FNh4_xd_Tg';
-      const CHAT_ID = '-1003087106966';
+      const BOT_TOKEN = process.env.REACT_APP_BOT_TOKEN || '';
+      const CHAT_ID = process.env.REACT_APP_CHAT_ID || '';
       
       const formData = new FormData();
       formData.append('chat_id', CHAT_ID);

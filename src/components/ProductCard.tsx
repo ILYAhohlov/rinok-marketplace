@@ -44,6 +44,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
             height: '100%', 
             objectFit: 'cover' 
           }}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&h=200&fit=crop';
+          }}
         />
         <button 
           onClick={(e) => {

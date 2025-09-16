@@ -29,51 +29,23 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
   const [uploading, setUploading] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  // Очищаем localStorage при загрузке
+  // Принудительно обновляем данные при смене пользователя
   React.useEffect(() => {
-    // Удаляем все товары из localStorage
-    Object.keys(localStorage).forEach(key => {
-      if (key.startsWith('sellerProducts_')) {
-        localStorage.removeItem(key);
-        console.log('Removed from localStorage:', key);
-      }
-    });
-  }, []);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('SellerDashboard mounted');
+    }
+  }, [user.id, products.length]);
 
-  // Фильтруем товары по sellerId
-  const sellerProducts = products.filter(p => String(p.sellerId) === String(user.id));
+  // Фильтруем товары по sellerId с более строгой проверкой
+  const sellerProducts = products.filter(p => {
+    const productSellerId = String(p.sellerId).trim();
+    const currentUserId = String(user.id).trim();
+    return productSellerId === currentUserId;
+  });
   
-  console.log('=== SELLER DASHBOARD DEBUG ===');
-  console.log('All products:', products.length);
-  console.log('User ID:', user.id, 'Type:', typeof user.id);
-  console.log('User ID as string:', String(user.id));
-  const matchingProducts = products.filter(p => String(p.sellerId) === String(user.id));
-  // Показываем уникальные sellerId для отладки
-  const sellerIds = products.map(p => String(p.sellerId));
-  const uniqueSellerIds = sellerIds.filter((id, index) => sellerIds.indexOf(id) === index);
-  console.log('Unique seller IDs in products:', uniqueSellerIds);
-  console.log('Current user ID:', String(user.id));
-  console.log('IDs match?', uniqueSellerIds.includes(String(user.id)));
-  
-  // Показываем первые 5 товаров для примера
-  console.log('First 5 products:', products.slice(0, 5).map(p => ({
-    name: p.name,
-    sellerId: p.sellerId,
-    sellerIdString: String(p.sellerId)
-  })));
-  
-  console.log('Products with sellerId:', products.map(p => ({ 
-    id: p.id, 
-    name: p.name, 
-    sellerId: p.sellerId, 
-    sellerIdType: typeof p.sellerId,
-    sellerIdString: String(p.sellerId),
-    match: String(p.sellerId) === String(user.id)
-  })));
-  console.log('Matching products from global:', matchingProducts.length);
-  console.log('Seller products:', sellerProducts.length);
-
-  console.log('==============================');
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Seller products found:', sellerProducts.length);
+  }
   const sellerOrders = orders.filter(order => 
     order.items.some(item => 
       sellerProducts.some(product => product.id === item.productId)
@@ -105,9 +77,7 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
       let imageUrl = formData.get('imageUrl') as string;
       
       if (selectedImage) {
-        console.log('Загружаем изображение в Telegram...');
         imageUrl = await api.uploadImageToTelegram(selectedImage);
-        console.log('Получена ссылка:', imageUrl);
       }
       
       const newProduct = {
@@ -118,7 +88,7 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
         description: formData.get('description') as string,
         stock: Number(formData.get('stock')),
         minOrderQuantity: Number(formData.get('minOrderQuantity')),
-        sellerId: user.id,
+        sellerId: String(user.id).trim(),
         rating: 0,
         reviews: 0
       };
@@ -161,9 +131,7 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
       let imageUrl = formData.get('imageUrl') as string || editingProduct.image;
       
       if (selectedImage) {
-        console.log('Обновляем изображение через Telegram...');
         imageUrl = await api.uploadImageToTelegram(selectedImage);
-        console.log('Получена новая ссылка:', imageUrl);
       }
       
       const updates = {
@@ -331,7 +299,7 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
                     <button 
                       className="btn btn-secondary"
                       onClick={() => {
-                        console.log('Force reload clicked');
+
                         window.location.reload();
                       }}
                       style={{ fontSize: '14px' }}
@@ -662,6 +630,10 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
                           objectFit: 'cover',
                           borderRadius: '8px',
                           marginBottom: '12px'
+                        }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&h=200&fit=crop';
                         }}
                       />
                       <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>

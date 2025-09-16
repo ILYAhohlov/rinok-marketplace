@@ -16,7 +16,7 @@ app.use(cors({
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
 }));
 app.use(express.json());
 
@@ -36,14 +36,18 @@ app.get('/api/products', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
   try {
-    console.log('Creating product:', req.body);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Creating product');
+    }
     const product = {
       ...req.body,
       id: Date.now().toString(),
       createdAt: new Date().toISOString()
     };
     const messageId = await db.save('products', product);
-    console.log('Product saved with message ID:', messageId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Product saved');
+    }
     res.json(product);
   } catch (error) {
     console.error('Error creating product:', error);
