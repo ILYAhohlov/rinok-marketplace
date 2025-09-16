@@ -31,7 +31,9 @@ const AppContent: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+    return localStorage.getItem('adminLoggedIn') === 'true';
+  });
 
   useEffect(() => {
     loadData();
@@ -115,7 +117,9 @@ const AppContent: React.FC = () => {
 
   const handleLogout = () => {
     setCurrentUser(null);
+    setIsAdminLoggedIn(false);
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('adminLoggedIn');
   };
 
   const handleAddToCart = (product: Product, quantity: number = 1) => {
@@ -351,7 +355,10 @@ const AppContent: React.FC = () => {
                     onDeleteProduct={handleDeleteProduct}
                   />
                 ) : (
-                  <AdminLogin onLogin={() => setIsAdminLoggedIn(true)} />
+                  <AdminLogin onLogin={() => {
+                    setIsAdminLoggedIn(true);
+                    localStorage.setItem('adminLoggedIn', 'true');
+                  }} />
                 )
               } 
             />
