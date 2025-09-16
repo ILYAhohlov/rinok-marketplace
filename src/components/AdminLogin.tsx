@@ -12,7 +12,10 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
     e.preventDefault();
     
     // Простая проверка
-    if (credentials.login === 'glavadmin' && credentials.password === '55555') {
+    const adminLogin = process.env.REACT_APP_ADMIN_LOGIN || 'glavadmin';
+    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD || '55555';
+    
+    if (credentials.login === adminLogin && credentials.password === adminPassword) {
       onLogin();
     } else {
       setError('Неверный логин или пароль');
