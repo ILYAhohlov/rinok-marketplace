@@ -7,7 +7,7 @@ interface HeaderProps {
   cartItemsCount: number;
   onAuthClick: () => void;
   onCartClick: () => void;
-  onLogin: (userType: 'customer' | 'seller', userData?: any) => void;
+  onLogin: (userType: 'customer' | 'seller' | 'admin', userData?: any) => void;
   onShowAuthModal: () => void;
   onDashboardClick: () => void;
   onHomeClick: () => void;

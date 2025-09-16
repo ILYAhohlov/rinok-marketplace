@@ -1,4 +1,4 @@
-const API_BASE = 'https://rinok-server.onrender.com/api';
+const API_BASE = 'https://asiasib-clean.onrender.com/api';
 
 export const api = {
   // Products

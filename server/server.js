@@ -19,6 +19,24 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
 }));
 app.use(express.json());
+app.use(express.static('public'));
+
+// Serve React app
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Rinok API</title>
+    </head>
+    <body>
+      <h1>Rinok API Server</h1>
+      <p>API работает на /api/*</p>
+      <p>Фронтенд: <a href="https://your-frontend-url.onrender.com">Перейти к приложению</a></p>
+    </body>
+    </html>
+  `);
+});
 
 const db = new MongoDB(
   process.env.MONGODB_URI || 'mongodb://rinok_anywherehe:423c7d67d4e91c8b370846e868153e8be8ddbcf8@e4gb4v.h.filess.io:61004/rinok_anywherehe'
