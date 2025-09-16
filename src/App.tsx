@@ -333,6 +333,22 @@ const AppContent: React.FC = () => {
                 )
               } 
             />
+            
+            <Route 
+              path="/admin" 
+              element={
+                <AdminDashboard 
+                  orders={orders.map(order => ({
+                    ...order,
+                    customerName: 'Покупатель'
+                  }))}
+                  products={products}
+                  users={[]}
+                  onUpdateProduct={handleUpdateProduct}
+                  onDeleteProduct={handleDeleteProduct}
+                />
+              } 
+            />
           </Routes>
           )}
         </main>
@@ -373,13 +389,7 @@ const AppContent: React.FC = () => {
             >
               Войти как продавец
             </button>
-            <button 
-              className="btn btn-danger"
-              onClick={() => handleLogin('admin')}
-              style={{ fontSize: '12px', padding: '8px 12px', background: '#dc3545', color: 'white' }}
-            >
-              Войти как админ
-            </button>
+
           </div>
         )}
 
