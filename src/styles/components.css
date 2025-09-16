@@ -1,0 +1,95 @@
+/* Admin Login Styles */
+.admin-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.admin-login-card {
+  width: 400px;
+  text-align: center;
+}
+
+.admin-login-form {
+  margin-bottom: 16px;
+}
+
+.admin-login-error {
+  color: #dc3545;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.admin-login-info {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #666;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Product Card Styles */
+.product-card {
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.product-image-container {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: #f8f8f8;
+  position: relative;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-add-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-add-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.1);
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #38b2ac;
+  margin-bottom: 8px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+}

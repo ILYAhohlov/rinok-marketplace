@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Product } from '../types';
+import '../styles/components.css';
 
 interface ProductCardProps {
   product: Product;
@@ -10,40 +11,15 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProductClick }) => {
   return (
-    <div 
-      className="card" 
-      style={{ 
-        padding: '16px',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-      }}
+    <div className="card product-card"
       onClick={() => onProductClick(product)}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
-      }}
+
     >
-      <div style={{ 
-        width: '100%',
-        height: '160px',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        marginBottom: '12px',
-        background: '#f8f8f8',
-        position: 'relative'
-      }}>
+      <div className="product-image-container">
         <img 
           src={product.image} 
           alt={product.name}
-          style={{ 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover' 
-          }}
+          className="product-image"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&h=200&fit=crop';

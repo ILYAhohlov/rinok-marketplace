@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/components.css';
 
 interface AdminLoginProps {
   onLogin: () => void;
@@ -23,14 +24,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '80vh',
-      padding: '20px'
-    }}>
-      <div className="card" style={{ width: '400px', textAlign: 'center' }}>
+    <div className="admin-login-container">
+      <div className="card admin-login-card">
         <h2 style={{ marginBottom: '24px' }}>Вход в админ панель</h2>
         
         <form onSubmit={handleSubmit}>

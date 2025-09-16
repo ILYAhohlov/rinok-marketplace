@@ -13,6 +13,7 @@ import { User, Product, CartItem, Order } from './types';
 import { mockUsers, mockProducts } from './utils/mockData';
 import { api } from './utils/api';
 import './styles/globals.css';
+import './styles/components.css';
 
 
 

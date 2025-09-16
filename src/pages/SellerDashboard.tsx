@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Package, Plus, BarChart3, Settings, Eye, Edit, Trash2, Upload } from 'lucide-react';
 import { Product, Order, User as UserType } from '../types';
 import { api } from '../utils/api';
+import { sanitizeInput } from '../utils/sanitizer';
 
 interface SellerDashboardProps {
   user: UserType;
@@ -81,11 +82,11 @@ const SellerDashboard: React.FC<SellerDashboardProps> = ({
       }
       
       const newProduct = {
-        name: formData.get('name') as string,
+        name: sanitizeInput(formData.get('name') as string),
         price: Number(formData.get('price')),
         image: imageUrl,
-        category: formData.get('category') as string,
-        description: formData.get('description') as string,
+        category: sanitizeInput(formData.get('category') as string),
+        description: sanitizeInput(formData.get('description') as string),
         stock: Number(formData.get('stock')),
         minOrderQuantity: Number(formData.get('minOrderQuantity')),
         sellerId: String(user.id).trim(),

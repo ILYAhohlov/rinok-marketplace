@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import MongoDB from './mongoDB.js';
 
 dotenv.config();
@@ -20,6 +21,17 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
 }));
 app.use(express.json());
+app.use(cookieParser());
+
+// Simple CSRF protection
+const csrfProtection = (req, res, next) => {
+  if (req.method === 'GET') return next();
+  const token = req.headers['x-csrf-token'] || req.body._csrf;
+  if (!token || token !== 'rinok-csrf-token') {
+    return res.status(403).json({ error: 'CSRF token missing or invalid' });
+  }
+  next();
+};
 app.use(express.static('public'));
 
 // Serve React app
@@ -53,7 +65,7 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-app.post('/api/products', async (req, res) => {
+app.post('/api/products', csrfProtection, async (req, res) => {
   try {
     if (process.env.NODE_ENV === 'development') {
       console.log('Creating product');
@@ -74,7 +86,7 @@ app.post('/api/products', async (req, res) => {
   }
 });
 
-app.put('/api/products/:id', async (req, res) => {
+app.put('/api/products/:id', csrfProtection, async (req, res) => {
   try {
     const productId = req.params.id;
     const updates = req.body;
@@ -91,7 +103,7 @@ app.put('/api/products/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/products/:id', async (req, res) => {
+app.delete('/api/products/:id', csrfProtection, async (req, res) => {
   try {
     const productId = req.params.id;
     // Для простоты просто возвращаем успех
@@ -111,7 +123,7 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-app.post('/api/orders', async (req, res) => {
+app.post('/api/orders', csrfProtection, async (req, res) => {
   try {
     const order = {
       ...req.body,
@@ -135,7 +147,7 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-app.post('/api/users', async (req, res) => {
+app.post('/api/users', csrfProtection, async (req, res) => {
   try {
     const user = {
       ...req.body,
