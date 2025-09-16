@@ -10,6 +10,7 @@ const port = process.env.PORT || 3001;
 
 app.use(cors({
   origin: [
+    'https://optbazar.onrender.com',
     'https://rinok-frontend.onrender.com',
     'http://localhost:3000',
     'https://localhost:3000'
@@ -32,7 +33,7 @@ app.get('/', (req, res) => {
     <body>
       <h1>Rinok API Server</h1>
       <p>API работает на /api/*</p>
-      <p>Фронтенд: <a href="https://your-frontend-url.onrender.com">Перейти к приложению</a></p>
+      <p>Фронтенд: <a href="https://optbazar.onrender.com">Перейти к приложению</a></p>
     </body>
     </html>
   `);
